@@ -1,6 +1,6 @@
 // Horse Race client module: fixed 3-roll Ship/Captain/Crew sequence game.
 (function () {
-  const B = window.BarnBets;
+  const B = window.BarnyardDice;
 
   let heldPositions = new Set();
   let lastRollSignature = null;
@@ -210,7 +210,7 @@
     }
   }
 
-  window.BarnBetsModes.horserace = {
+  window.BarnyardDiceModes.horserace = {
     key: 'horserace',
     name: 'Horse Race',
     icon: '🐎',

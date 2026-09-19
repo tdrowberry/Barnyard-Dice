@@ -245,7 +245,7 @@ function getLikelyLanUrls(port) {
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`Barn Bets server running on port ${PORT}`);
+  console.log(`Barnyard Dice server running on port ${PORT}`);
   console.log(`  Local:   http://localhost:${PORT}`);
   const lanUrls = getLikelyLanUrls(PORT);
   if (lanUrls.length) {

@@ -1,7 +1,7 @@
 // Pigout client module: no shared pot, each player has their own running score and busts
 // on their own turn only.
 (function () {
-  const B = window.BarnBets;
+  const B = window.BarnyardDice;
 
   let hogCount = 1;
   let lastTurnKey = null;
@@ -169,7 +169,7 @@
     }
   }
 
-  window.BarnBetsModes.pigout = {
+  window.BarnyardDiceModes.pigout = {
     key: 'pigout',
     name: 'Pig Out',
     icon: '🐷',

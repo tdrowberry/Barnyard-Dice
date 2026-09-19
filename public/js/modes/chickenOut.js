@@ -2,7 +2,7 @@
 // single-mode app.js with field names updated for the multi-mode room shape
 // (room.config.rounds/startingRolls, p.score instead of p.totalScore).
 (function () {
-  const B = window.BarnBets;
+  const B = window.BarnyardDice;
 
   const DIE_FACES = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
   let selectedSum = null;
@@ -265,7 +265,7 @@
     });
   }
 
-  window.BarnBetsModes.chickenout = {
+  window.BarnyardDiceModes.chickenout = {
     key: 'chickenout',
     name: 'Chicken Out',
     icon: '🐔',

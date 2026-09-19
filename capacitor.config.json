@@ -1,6 +1,6 @@
 {
-  "appId": "com.tdrowberry.barnbets",
-  "appName": "Barn Bets",
+  "appId": "com.tdrowberry.barnyarddice",
+  "appName": "Barnyard Dice",
   "webDir": "public",
   "server": {
     "url": "https://barn-bets.onrender.com",

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Barn Bets</string>
-    <string name="title_activity_main">Barn Bets</string>
-    <string name="package_name">com.tdrowberry.barnbets</string>
-    <string name="custom_url_scheme">com.tdrowberry.barnbets</string>
+    <string name="app_name">Barnyard Dice</string>
+    <string name="title_activity_main">Barnyard Dice</string>
+    <string name="package_name">com.tdrowberry.barnyarddice</string>
+    <string name="custom_url_scheme">com.tdrowberry.barnyarddice</string>
 </resources>

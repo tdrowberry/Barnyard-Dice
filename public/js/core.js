@@ -1,11 +1,11 @@
 // Shared infrastructure reused by every game mode's client module: socket wiring, screen
 // navigation, session storage, the hub/mode-picker, generic lobby/host-controls/event-log/
 // scoreboard rendering, and small reusable UI widgets (the physical-dice-slot picker).
-// Each mode registers itself into window.BarnBetsModes (see js/modes/*.js) before app.js
+// Each mode registers itself into window.BarnyardDiceModes (see js/modes/*.js) before app.js
 // boots the app.
-window.BarnBetsModes = {};
+window.BarnyardDiceModes = {};
 
-window.BarnBets = (function () {
+window.BarnyardDice = (function () {
   const socket = io();
 
   const state = {
@@ -26,11 +26,11 @@ window.BarnBets = (function () {
   const GAME_MODE_ORDER = ['chickenout', 'pigout', 'quackquack', 'horserace'];
 
   function currentMode() {
-    return window.BarnBetsModes[state.selectedMode] || null;
+    return window.BarnyardDiceModes[state.selectedMode] || null;
   }
 
   function modeFor(room) {
-    return window.BarnBetsModes[room.gameMode] || null;
+    return window.BarnyardDiceModes[room.gameMode] || null;
   }
 
   const AVATAR_COLORS = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
@@ -107,21 +107,23 @@ window.BarnBets = (function () {
     updateHeaderChrome(id);
   }
 
-  const BARN_BETS_LOGO = '/img/barnbets-logo.jpg';
-  const BARN_BETS_HERO = '/img/barnbets-hero.jpg';
+  const APP_LOGO = '/img/barnyarddice-logo.jpg';
+  // No app-wide hero background yet - set this once a "Barnyard Dice" background exists.
+  const APP_HERO = null;
 
   // The header's logo icon and the pre-game hero background show the selected mode's own
   // art once it has any; on the hub (or any mode that hasn't gotten its own art yet) they
-  // fall back to the overall Barn Bets logo/background.
+  // fall back to the overall Barnyard Dice logo, and to the plain gradient if there's no
+  // app-wide background.
   function updateHeaderChrome(screenId) {
     const mode = currentMode();
 
-    el('app-tagline').textContent = mode ? mode.name : 'Pick a game, place your bets';
-    el('app-logo-icon').src = (mode && mode.logoImage) || BARN_BETS_LOGO;
+    el('app-tagline').textContent = mode ? mode.name : 'Pick a game, roll the dice';
+    el('app-logo-icon').src = (mode && mode.logoImage) || APP_LOGO;
 
-    const heroImage = (mode && mode.heroBackground) || BARN_BETS_HERO;
-    document.body.style.setProperty('--hero-bg-image', `url('${heroImage}')`);
-    document.body.classList.toggle('bg-hero', HERO_BG_SCREENS.has(screenId));
+    const heroImage = (mode && mode.heroBackground) || APP_HERO;
+    document.body.style.setProperty('--hero-bg-image', heroImage ? `url('${heroImage}')` : 'none');
+    document.body.classList.toggle('bg-hero', HERO_BG_SCREENS.has(screenId) && !!heroImage);
   }
 
   function escapeHtml(str) {
@@ -153,20 +155,20 @@ window.BarnBets = (function () {
 
   function saveSession(roomCode, playerId, isHost) {
     try {
-      sessionStorage.setItem('barnbets.session', JSON.stringify({ roomCode, playerId, isHost }));
+      sessionStorage.setItem('barnyarddice.session', JSON.stringify({ roomCode, playerId, isHost }));
     } catch (e) { /* storage unavailable, non-fatal */ }
   }
 
   function loadSession() {
     try {
-      return JSON.parse(sessionStorage.getItem('barnbets.session'));
+      return JSON.parse(sessionStorage.getItem('barnyarddice.session'));
     } catch (e) {
       return null;
     }
   }
 
   function clearSession() {
-    try { sessionStorage.removeItem('barnbets.session'); } catch (e) { /* ignore */ }
+    try { sessionStorage.removeItem('barnyarddice.session'); } catch (e) { /* ignore */ }
   }
 
   function maybeShowSplash() {
@@ -200,7 +202,7 @@ window.BarnBets = (function () {
     const grid = el('hub-game-grid');
     grid.innerHTML = '';
     GAME_MODE_ORDER.forEach((key) => {
-      const mode = window.BarnBetsModes[key];
+      const mode = window.BarnyardDiceModes[key];
       if (!mode) return;
       const card = document.createElement('div');
       card.className = 'game-card';
@@ -218,7 +220,7 @@ window.BarnBets = (function () {
 
   function selectMode(key) {
     state.selectedMode = key;
-    const mode = window.BarnBetsModes[key];
+    const mode = window.BarnyardDiceModes[key];
     if (!mode) return;
     el('mode-landing-title').textContent = mode.name;
     el('mode-landing-tagline').textContent = mode.tagline;
@@ -272,7 +274,7 @@ window.BarnBets = (function () {
 
   function showSetupFieldsFor(mode) {
     GAME_MODE_ORDER.forEach((key) => {
-      const m = window.BarnBetsModes[key];
+      const m = window.BarnyardDiceModes[key];
       if (m) el(m.setupFieldsId).classList.toggle('hidden', key !== mode.key);
     });
     if (mode.refreshVisibility) mode.refreshVisibility('setup');
@@ -334,7 +336,7 @@ window.BarnBets = (function () {
 
   function renderLobbySettingsForm(room, mode) {
     GAME_MODE_ORDER.forEach((key) => {
-      const m = window.BarnBetsModes[key];
+      const m = window.BarnyardDiceModes[key];
       if (m) el(m.lobbyFieldsId).classList.toggle('hidden', key !== mode.key);
     });
     populateConfigFields('lobby', mode, room.config, !state.isHost);
@@ -569,7 +571,7 @@ window.BarnBets = (function () {
     el('game-round-info').textContent = room.endedEarly ? 'Game ended early' : 'Game complete';
 
     GAME_MODE_ORDER.forEach((key) => {
-      const m = window.BarnBetsModes[key];
+      const m = window.BarnyardDiceModes[key];
       if (m) el(m.playId).classList.add('hidden');
     });
 
@@ -633,7 +635,7 @@ window.BarnBets = (function () {
     el('host-controls').classList.toggle('hidden', !state.isHost);
 
     GAME_MODE_ORDER.forEach((key) => {
-      const m = window.BarnBetsModes[key];
+      const m = window.BarnyardDiceModes[key];
       if (m) el(m.playId).classList.toggle('hidden', key !== mode.key);
     });
 
@@ -652,7 +654,7 @@ window.BarnBets = (function () {
     turnEl.textContent = '🚪 You were removed from this game.';
     turnEl.classList.remove('my-turn');
     GAME_MODE_ORDER.forEach((key) => {
-      const m = window.BarnBetsModes[key];
+      const m = window.BarnyardDiceModes[key];
       if (m) el(m.playId).classList.add('hidden');
     });
     el('host-controls').classList.add('hidden');
@@ -943,7 +945,7 @@ window.BarnBets = (function () {
     renderHub();
     wireCore();
     updateConfirmRollsVisibility();
-    Object.values(window.BarnBetsModes).forEach((mode) => {
+    Object.values(window.BarnyardDiceModes).forEach((mode) => {
       if (mode.wireSetup) mode.wireSetup();
       if (mode.wireLobby) mode.wireLobby();
       if (mode.wireGame) mode.wireGame();

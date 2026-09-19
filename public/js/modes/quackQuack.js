@@ -1,6 +1,6 @@
 // Quack Quack client module: six-dice Farkle-family scoring puzzle with hot dice.
 (function () {
-  const B = window.BarnBets;
+  const B = window.BarnyardDice;
 
   let selectedIndices = new Set();
   let lastRollSignature = null;
@@ -186,7 +186,7 @@
     }
   }
 
-  window.BarnBetsModes.quackquack = {
+  window.BarnyardDiceModes.quackquack = {
     key: 'quackquack',
     name: 'Quack Quack',
     icon: '🦆',
