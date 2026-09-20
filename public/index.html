@@ -6,19 +6,16 @@
 <meta name="theme-color" content="#0b3d26">
 <meta name="description" content="Barnyard Dice - a party pack of push-your-luck dice games for a group in the same room.">
 <title>Barnyard Dice</title>
-<link rel="icon" href="/img/barnyarddice-logo.jpg">
-<link rel="apple-touch-icon" href="/img/barnyarddice-logo.jpg">
+<link rel="icon" href="/img/barnyard-dice/logo.jpg">
+<link rel="apple-touch-icon" href="/img/barnyard-dice/logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div id="splash-screen" class="hidden">
-  <div class="splash-text">
-    <span class="splash-title">Barnyard Dice</span>
-    <span class="splash-tagline">Pick a game, roll the dice</span>
-  </div>
+<div id="splash-screen">
+  <img id="splash-image" src="/img/barnyard-dice/hero.jpg" alt="Barnyard Dice">
 </div>
 
 <div id="how-to-play-modal" class="modal hidden">
@@ -33,7 +30,7 @@
 <div id="app">
   <header class="app-header">
     <button id="btn-how-to-play" class="how-to-play-btn" type="button">❓ How to Play</button>
-    <h1><img id="app-logo-icon" class="logo-icon" src="/img/barnyarddice-logo.jpg" alt="">Barnyard Dice</h1>
+    <h1><img id="app-logo-icon" class="logo-icon" src="/img/barnyard-dice/logo.jpg" alt="">Barnyard Dice</h1>
     <p class="app-tagline" id="app-tagline">Pick a game, roll the dice</p>
   </header>
 
@@ -307,7 +304,7 @@
       <div class="game-topbar">
         <div class="pot-display"><span class="pot-label">Pot</span><span class="pot-value" id="game-pot">0</span></div>
       </div>
-      <button id="btn-chicken-out" class="btn-danger" type="button" disabled><img class="chicken-out-icon" src="/img/chicken-out-icon.png" alt="">Chicken Out</button>
+      <button id="btn-chicken-out" class="btn-danger" type="button" disabled><img class="chicken-out-icon" src="/img/chicken-out/action-icon.png" alt="">Chicken Out</button>
 
       <div id="game-physical-panel" class="hidden">
         <div class="dice-grid" id="dice-grid">
@@ -407,7 +404,7 @@
       </div>
     </div>
 
-    <h3><img class="coop-icon" src="/img/coop-icon.jpg" alt="">Scoreboard</h3>
+    <h3><img class="coop-icon" src="/img/shared/coop-icon.jpg" alt="">Scoreboard</h3>
     <ul id="game-scoreboard" class="player-list"></ul>
 
     <button id="btn-new-session" class="btn-primary hidden" type="button">🔄 Start New Session (Same Players)</button>
@@ -447,5 +444,9 @@
 <script src="/js/modes/quackQuack.js"></script>
 <script src="/js/modes/captainHorse.js"></script>
 <script src="/js/app.js"></script>
+<script id="splash-failsafe">
+  // If anything above fails to run, never leave the splash covering the app.
+  setTimeout(function () { var s = document.getElementById("splash-screen"); if (s) s.classList.add("hidden"); }, 8000);
+</script>
 </body>
 </html>

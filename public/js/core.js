@@ -107,9 +107,11 @@ window.BarnyardDice = (function () {
     updateHeaderChrome(id);
   }
 
-  const APP_LOGO = '/img/barnyarddice-logo.jpg';
-  // No app-wide hero background yet - set this once a "Barnyard Dice" background exists.
-  const APP_HERO = null;
+  const APP_LOGO = '/img/barnyard-dice/logo.jpg';
+  const APP_HERO = '/img/barnyard-dice/hero.jpg';
+  // The app-wide art is square with its title near the top, so keep the top in view when a
+  // wide screen crops it; the per-game art is landscape and stays centered.
+  const APP_HERO_POSITION = 'center top';
 
   // The header's logo icon and the pre-game hero background show the selected mode's own
   // art once it has any; on the hub (or any mode that hasn't gotten its own art yet) they
@@ -121,8 +123,10 @@ window.BarnyardDice = (function () {
     el('app-tagline').textContent = mode ? mode.name : 'Pick a game, roll the dice';
     el('app-logo-icon').src = (mode && mode.logoImage) || APP_LOGO;
 
-    const heroImage = (mode && mode.heroBackground) || APP_HERO;
+    const ownHero = mode && mode.heroBackground;
+    const heroImage = ownHero || APP_HERO;
     document.body.style.setProperty('--hero-bg-image', heroImage ? `url('${heroImage}')` : 'none');
+    document.body.style.setProperty('--hero-bg-position', ownHero ? 'center' : APP_HERO_POSITION);
     document.body.classList.toggle('bg-hero', HERO_BG_SCREENS.has(screenId) && !!heroImage);
   }
 
@@ -171,19 +175,61 @@ window.BarnyardDice = (function () {
     try { sessionStorage.removeItem('barnyarddice.session'); } catch (e) { /* ignore */ }
   }
 
-  function maybeShowSplash() {
-    const roomFromUrl = new URLSearchParams(location.search).get('room');
-    if (!roomFromUrl) return;
-    const session = loadSession();
-    const isReconnectToSameRoom = session && session.roomCode === roomFromUrl.toUpperCase() && session.playerId;
-    if (isReconnectToSameRoom) return;
+  // --- Splash: full-screen art held for a beat, then the UI underneath is revealed ---
 
+  const SPLASH_FADE_MS = 350; // matches the #splash-screen opacity transition in style.css
+  const APP_SPLASH_MS = 1000; // Barnyard Dice art on first open
+  const GAME_SPLASH_MS = 2000; // a game's own art after tapping it on the hub
+  let splashBusy = false;
+
+  // Shows the image at src for holdMs (counted from when it has actually loaded, so a slow
+  // connection doesn't eat into the time people get to see it), then calls onReveal() -
+  // which swaps the screen underneath - as the splash fades out.
+  function showSplash(src, holdMs, onReveal) {
     const splash = el('splash-screen');
-    splash.classList.remove('hidden');
-    setTimeout(() => {
+    const img = el('splash-image');
+    splashBusy = true;
+    splash.classList.remove('hidden', 'fade-out');
+
+    let started = false;
+    function startHold() {
+      if (started) return;
+      started = true;
+      setTimeout(reveal, holdMs);
+    }
+    function reveal() {
+      if (onReveal) onReveal();
       splash.classList.add('fade-out');
-      setTimeout(() => splash.classList.add('hidden'), 500);
-    }, 5000);
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        splash.classList.remove('fade-out');
+        splashBusy = false;
+      }, SPLASH_FADE_MS);
+    }
+
+    img.onload = startHold;
+    img.onerror = startHold;
+    setTimeout(startHold, 3000); // never wait on a stalled image forever
+    if (img.getAttribute('src') === src && img.complete) startHold();
+    else img.src = src;
+  }
+
+  // Fresh open of the app: show the Barnyard Dice art briefly, unless this is just a page
+  // reconnecting into a room it already belongs to (forcing that through a splash is noise).
+  function showAppSplash() {
+    if (loadSession()) {
+      el('splash-screen').classList.add('hidden');
+      return;
+    }
+    showSplash(APP_HERO, APP_SPLASH_MS);
+  }
+
+  // Warm the cache so a game's art is already there when someone taps its card.
+  function preloadArt() {
+    GAME_MODE_ORDER.forEach((key) => {
+      const mode = window.BarnyardDiceModes[key];
+      if (mode && mode.heroBackground) new Image().src = mode.heroBackground;
+    });
   }
 
   function prefillJoin(code) {
@@ -213,7 +259,11 @@ window.BarnyardDice = (function () {
       card.innerHTML = iconHtml
         + `<span class="game-card-name">${escapeHtml(mode.name)}</span>`
         + `<span class="game-card-tagline">${escapeHtml(mode.tagline)}</span>`;
-      card.addEventListener('click', () => selectMode(key));
+      card.addEventListener('click', () => {
+        if (splashBusy) return; // ignore extra taps while a game's art is showing
+        if (mode.heroBackground) showSplash(mode.heroBackground, GAME_SPLASH_MS, () => selectMode(key));
+        else selectMode(key);
+      });
       grid.appendChild(card);
     });
   }
@@ -415,7 +465,7 @@ window.BarnyardDice = (function () {
   const RANK_EGGS = { 1: 'gold', 2: 'silver', 3: 'bronze' };
   function rankMedal(rank) {
     const egg = RANK_EGGS[rank];
-    if (egg) return `<img class="rank-egg" src="/img/egg-${egg}.png" alt="">`;
+    if (egg) return `<img class="rank-egg" src="/img/shared/egg-${egg}.png" alt="">`;
     return `#${rank}`;
   }
 
@@ -951,7 +1001,8 @@ window.BarnyardDice = (function () {
       if (mode.wireGame) mode.wireGame();
     });
     showScreen('screen-hub');
-    maybeShowSplash();
+    showAppSplash();
+    setTimeout(preloadArt, 1500);
   }
 
   // Re-renders just the scoreboard/event-log/host-controls chrome from the last known room

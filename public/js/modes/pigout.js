@@ -174,8 +174,8 @@
     name: 'Pig Out',
     icon: '🐷',
     tagline: 'Roll, bank, don’t get greedy',
-    logoImage: '/img/pigout-logo.jpg',
-    heroBackground: '/img/pigout-hero.jpg',
+    logoImage: '/img/pig-out/logo.jpg',
+    heroBackground: '/img/pig-out/hero.jpg',
     howToPlay: [
       '<strong>Roll</strong> and add each roll to your <strong>turn total</strong>.',
       'Roll a <strong>1</strong> and your turn total is lost — turn passes to the next player.',

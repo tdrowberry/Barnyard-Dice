@@ -191,8 +191,8 @@
     name: 'Quack Quack',
     icon: '🦆',
     tagline: 'Six dice, score the combo',
-    logoImage: '/img/quackquack-logo.jpg',
-    heroBackground: '/img/quackquack-hero.jpg',
+    logoImage: '/img/quack-quack/logo.jpg',
+    heroBackground: '/img/quack-quack/hero.jpg',
     howToPlay: [
       'Roll all 6 dice, then <strong>set aside</strong> at least one scoring die or combo each roll.',
       'Singles: a <strong>1</strong> is worth 100, a <strong>5</strong> is worth 50. Three or more of a kind score much more.',

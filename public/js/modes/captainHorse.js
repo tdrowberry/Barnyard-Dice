@@ -215,7 +215,8 @@
     name: 'Captain Horse',
     icon: '🐎',
     tagline: 'Three rolls, build your hand',
-    logoImage: '/img/captainhorse-logo.jpg',
+    logoImage: '/img/captain-horse/logo.jpg',
+    heroBackground: '/img/captain-horse/hero.jpg',
     howToPlay: [
       'Five dice, <strong>3 rolls</strong> per turn — no open-ended pushing your luck here.',
       'Lock in a <strong>6 (Ship)</strong>, then a <strong>5 (Captain)</strong>, then a <strong>4 (Crew)</strong>, strictly in that order.',
