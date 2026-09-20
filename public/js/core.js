@@ -23,7 +23,7 @@ window.BarnyardDice = (function () {
   ];
   const HERO_BG_SCREENS = new Set(['screen-hub', 'screen-mode-landing', 'screen-host-setup', 'screen-join']);
 
-  const GAME_MODE_ORDER = ['chickenout', 'pigout', 'quackquack', 'horserace'];
+  const GAME_MODE_ORDER = ['chickenout', 'pigout', 'quackquack', 'captainhorse'];
 
   function currentMode() {
     return window.BarnyardDiceModes[state.selectedMode] || null;
@@ -233,7 +233,7 @@ window.BarnyardDice = (function () {
     '<strong>Chicken Out</strong> — push your luck on a shared pot with the whole table.',
     '<strong>Pig Out</strong> — your own running score, bust on your own turn only.',
     '<strong>Quack Quack</strong> — six dice, a scoring puzzle, and hot dice streaks.',
-    '<strong>Horse Race</strong> — three rolls to build Ship, Captain, Crew, then cargo.',
+    '<strong>Captain Horse</strong> — three rolls to build Ship, Captain, Crew, then cargo.',
     'Pick a game from the list, then Host, Join, or play One Phone.',
   ];
 

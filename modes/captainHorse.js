@@ -1,6 +1,6 @@
-// Horse Race: fixed 3-roll Ship/Captain/Crew sequence game. See horse-race-spec.md.
+// Captain Horse: fixed 3-roll Ship/Captain/Crew sequence game. See horse-race-spec.md.
 // Internally still "ship/captain/crew" (fun to keep in code comments/log types), but never
-// surfaced player-facing - only "Horse Race" / "Ship" / "Captain" / "Crew" wording is used
+// surfaced player-facing - only "Captain Horse" / "Ship" / "Captain" / "Crew" wording is used
 // in anything a player sees, per that spec's branding note.
 const { logEvent, clampInt, rollDice, isValidFace, undoLastGeneric, nextIndexPlain } = require('./shared');
 
@@ -58,7 +58,7 @@ function cloneModeState(modeState) {
   };
 }
 
-// Horse Race's turn-end can reset a SECOND player's state (whoever becomes active next), so
+// Captain Horse's turn-end can reset a SECOND player's state (whoever becomes active next), so
 // undo snapshots every player wholesale rather than just the acting one - safer than trying
 // to enumerate every field a given action might touch as a side effect.
 function snapshotState(room) {
@@ -292,7 +292,7 @@ function undoLast(room, hostId) {
 }
 
 module.exports = {
-  key: 'horserace',
+  key: 'captainhorse',
   defaultConfig,
   clampConfig,
   initPlayerModeState,

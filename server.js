@@ -128,7 +128,7 @@ io.on('connection', (socket) => {
   registerAction(io, socket, 'player:quackSelectDice', 'selectDice');
   registerAction(io, socket, 'player:quackBank', 'bank');
 
-  // Horse Race
+  // Captain Horse
   registerAction(io, socket, 'player:horseRoll', 'roll');
   registerAction(io, socket, 'player:horseReportRoll', 'reportRoll');
   registerAction(io, socket, 'player:horseLock', 'lock');

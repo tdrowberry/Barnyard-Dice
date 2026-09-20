@@ -1,4 +1,4 @@
-// Horse Race client module: fixed 3-roll Ship/Captain/Crew sequence game.
+// Captain Horse client module: fixed 3-roll Ship/Captain/Crew sequence game.
 (function () {
   const B = window.BarnyardDice;
 
@@ -210,13 +210,12 @@
     }
   }
 
-  window.BarnyardDiceModes.horserace = {
-    key: 'horserace',
-    name: 'Horse Race',
+  window.BarnyardDiceModes.captainhorse = {
+    key: 'captainhorse',
+    name: 'Captain Horse',
     icon: '🐎',
     tagline: 'Three rolls, build your hand',
-    logoImage: '/img/horserace-logo.jpg',
-    heroBackground: '/img/horserace-hero.jpg',
+    logoImage: '/img/captainhorse-logo.jpg',
     howToPlay: [
       'Five dice, <strong>3 rolls</strong> per turn — no open-ended pushing your luck here.',
       'Lock in a <strong>6 (Ship)</strong>, then a <strong>5 (Captain)</strong>, then a <strong>4 (Crew)</strong>, strictly in that order.',
@@ -226,9 +225,9 @@
       'Highest score after all the rounds (or most rounds won, depending on the host’s settings) wins.',
     ],
     configFields: ['numberOfRounds', 'winCondition', 'tieBreak'],
-    setupFieldsId: 'setup-horserace',
-    lobbyFieldsId: 'lobby-setup-horserace',
-    playId: 'play-horserace',
+    setupFieldsId: 'setup-captainhorse',
+    lobbyFieldsId: 'lobby-setup-captainhorse',
+    playId: 'play-captainhorse',
     wireGame,
     renderGame,
     describeEvent,

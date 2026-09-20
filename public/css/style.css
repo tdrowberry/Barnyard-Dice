@@ -1039,7 +1039,7 @@ button {
   text-align: center;
 }
 
-/* N-slot tap-to-cycle physical dice entry, reused by Pigout/Quack Quack/Horse Race. */
+/* N-slot tap-to-cycle physical dice entry, reused by Pigout/Quack Quack/Captain Horse. */
 /* One row per physical die - tap the number it's actually showing, same pattern as
    Chicken Out's own sum grid, just per-die instead of per-combined-sum. */
 .dice-slots {
@@ -1091,7 +1091,7 @@ button {
   transform: scale(1.06);
 }
 
-/* Quack Quack's current-roll selector and Horse Race's 5-die row share this tile grid. */
+/* Quack Quack's current-roll selector and Captain Horse's 5-die row share this tile grid. */
 .dice-select-row {
   display: flex;
   flex-wrap: wrap;
@@ -1148,7 +1148,7 @@ button {
   letter-spacing: 0.04em;
 }
 
-/* Horse Race's Ship / Captain / Crew checklist. */
+/* Captain Horse's Ship / Captain / Crew checklist. */
 .sequence-checklist {
   display: flex;
   justify-content: space-between;
