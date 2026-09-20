@@ -3,7 +3,7 @@
   "appName": "Barnyard Dice",
   "webDir": "public",
   "server": {
-    "url": "https://barn-bets.onrender.com",
+    "url": "https://barnyard-dice.onrender.com",
     "androidScheme": "https"
   }
 }
