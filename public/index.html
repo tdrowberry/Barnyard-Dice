@@ -13,10 +13,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-<div id="splash-screen">
-  <img id="splash-image" src="/img/barnyard-dice/hero.jpg" alt="Barnyard Dice">
-</div>
+<body class="splash-on">
+<!-- Full-screen art behind the app while it is held back: same image, size and position as the
+     hero background the screens use, so the reveal is the art dimming rather than a swap. -->
+<div id="splash-screen" style="background-image: linear-gradient(rgba(7, 32, 22, 0.15), rgba(7, 32, 22, 0.3)), url('/img/barnyard-dice/hero.jpg'); background-position: center top;"></div>
 
 <div id="how-to-play-modal" class="modal hidden">
   <div class="modal-backdrop" id="how-to-play-backdrop"></div>
@@ -445,8 +445,14 @@
 <script src="/js/modes/captainHorse.js"></script>
 <script src="/js/app.js"></script>
 <script id="splash-failsafe">
-  // If anything above fails to run, never leave the splash covering the app.
-  setTimeout(function () { var s = document.getElementById("splash-screen"); if (s) s.classList.add("hidden"); }, 8000);
+  // Only if the app script never ran (so nothing will ever reveal the app): don't leave the
+  // splash covering a blank screen.
+  setTimeout(function () {
+    if (window.BarnyardDice) return;
+    var s = document.getElementById("splash-screen");
+    if (s) s.classList.add("hidden");
+    document.body.classList.remove("splash-on");
+  }, 8000);
 </script>
 </body>
 </html>

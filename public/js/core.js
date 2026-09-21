@@ -175,43 +175,66 @@ window.BarnyardDice = (function () {
     try { sessionStorage.removeItem('barnyarddice.session'); } catch (e) { /* ignore */ }
   }
 
-  // --- Splash: full-screen art held for a beat, then the UI underneath is revealed ---
+  // --- Splash: art held for a beat, then the app fades in over it ---
+  //
+  // The splash layer (#splash-screen) is the same image at the same size/position as the hero
+  // background the screens use, just brighter, and it sits *behind* the app. While it's up the
+  // app is held invisible (body.splash-on). Revealing swaps the screen underneath, fades the
+  // app in on top, and fades the layer out to the identical-but-dimmer background beneath - so
+  // the picture stays put and simply dims while the game options come into view.
 
-  const SPLASH_FADE_MS = 350; // matches the #splash-screen opacity transition in style.css
+  const SPLASH_FADE_MS = 400; // matches the opacity transitions in style.css
   const APP_SPLASH_MS = 1000; // Barnyard Dice art on first open
   const GAME_SPLASH_MS = 2000; // a game's own art after tapping it on the hub
   let splashBusy = false;
 
-  // Shows the image at src for holdMs (counted from when it has actually loaded, so a slow
-  // connection doesn't eat into the time people get to see it), then calls onReveal() -
-  // which swaps the screen underneath - as the splash fades out.
-  function showSplash(src, holdMs, onReveal) {
-    const splash = el('splash-screen');
-    const img = el('splash-image');
-    splashBusy = true;
-    splash.classList.remove('hidden', 'fade-out');
+  function splashBackground(src) {
+    return `linear-gradient(rgba(7, 32, 22, 0.15), rgba(7, 32, 22, 0.3)), url('${src}')`;
+  }
 
+  // Shows the art at src, holds it for holdMs (counted from when it is fully faded in AND
+  // loaded, so a slow connection doesn't eat into the time people get to see it), then calls
+  // onReveal() - which swaps the screen underneath - as the app fades in.
+  function showSplash(src, holdMs, onReveal, position) {
+    const splash = el('splash-screen');
+    splashBusy = true;
+    splash.style.backgroundImage = splashBackground(src);
+    splash.style.backgroundPosition = position || 'center';
+
+    // Already up (first open, painted from the HTML): nothing to fade in. Otherwise fade the
+    // art in while the current screen fades out.
+    const alreadyShowing = !splash.classList.contains('hidden');
+    if (!alreadyShowing) {
+      splash.style.opacity = '0';
+      splash.classList.remove('hidden');
+      void splash.offsetWidth; // commit opacity 0 so the fade starts from it
+      splash.style.opacity = '1';
+    }
+    document.body.classList.add('splash-on');
+
+    let loaded = false;
+    let settled = alreadyShowing;
     let started = false;
-    function startHold() {
-      if (started) return;
+    function tryStart() {
+      if (started || !loaded || !settled) return;
       started = true;
       setTimeout(reveal, holdMs);
     }
     function reveal() {
       if (onReveal) onReveal();
-      splash.classList.add('fade-out');
+      document.body.classList.remove('splash-on'); // app fades in
+      splash.style.opacity = '0'; // art fades out to the dimmer identical background
       setTimeout(() => {
         splash.classList.add('hidden');
-        splash.classList.remove('fade-out');
         splashBusy = false;
       }, SPLASH_FADE_MS);
     }
 
-    img.onload = startHold;
-    img.onerror = startHold;
-    setTimeout(startHold, 3000); // never wait on a stalled image forever
-    if (img.getAttribute('src') === src && img.complete) startHold();
-    else img.src = src;
+    const probe = new Image();
+    probe.onload = probe.onerror = () => { loaded = true; tryStart(); };
+    probe.src = src;
+    setTimeout(() => { settled = true; tryStart(); }, SPLASH_FADE_MS);
+    setTimeout(() => { loaded = true; tryStart(); }, 3000 + SPLASH_FADE_MS); // stalled-image failsafe
   }
 
   // Fresh open of the app: show the Barnyard Dice art briefly, unless this is just a page
@@ -219,9 +242,10 @@ window.BarnyardDice = (function () {
   function showAppSplash() {
     if (loadSession()) {
       el('splash-screen').classList.add('hidden');
+      document.body.classList.remove('splash-on');
       return;
     }
-    showSplash(APP_HERO, APP_SPLASH_MS);
+    showSplash(APP_HERO, APP_SPLASH_MS, null, APP_HERO_POSITION);
   }
 
   // Warm the cache so a game's art is already there when someone taps its card.

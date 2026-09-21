@@ -56,29 +56,29 @@ body.bg-hero {
   margin: 0 auto;
   min-height: 100vh;
   padding: 8px 16px 40px;
+  position: relative;
+  z-index: 1; /* above the #splash-screen art layer */
+  transition: opacity 0.4s ease;
 }
 
+/* Splash: art sitting behind the app, matching body.bg-hero's image/size/position. While it's
+   up the app is held invisible (body.splash-on); revealing fades the app in on top while this
+   layer fades out to the (dimmer) identical background underneath - no swap, no dark gap. */
 #splash-screen {
   position: fixed;
   inset: 0;
-  z-index: 1000;
-  background: var(--bg-3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 0;
+  background-color: var(--bg-3);
+  background-size: cover;
+  background-repeat: no-repeat;
   opacity: 1;
-  transition: opacity 0.35s ease;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
-#splash-screen.fade-out {
+body.splash-on #app {
   opacity: 0;
   pointer-events: none;
-}
-
-#splash-screen img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 .modal {
