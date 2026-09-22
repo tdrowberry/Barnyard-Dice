@@ -1,14 +1,12 @@
 # Render Blueprint - https://render.com/docs/blueprint-spec
-# One-click deploy: push this file to the repo, then open
-# https://dashboard.render.com/blueprints and point it at this repo
-# (or use https://render.com/deploy?repo=<this-repo-url>).
+# Deployed and live at https://barnyard-dice.onrender.com/
 #
 # This is a real-time multiplayer server (Express + Socket.IO), not a
 # static site -- it needs a live Node process, which is why this can't
 # go on GitHub Pages the way the other project pages do.
 services:
   - type: web
-    name: rowberry-barnyard-dice
+    name: barnyard-dice
     runtime: node
     plan: free
     buildCommand: npm install
